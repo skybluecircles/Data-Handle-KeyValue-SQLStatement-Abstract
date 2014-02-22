@@ -28,6 +28,11 @@ sub test_abstract_sql_statement {
         order   => $order,
     );
 
+    my @retrieved_rows;
+    while ( my $row = $data_handle->next_row() ) {
+        push @retrieved_rows, $row;
+    }
+
     my @expected_rows = (
         { distance => 9,  date => '2013-07-13' },
         { distance => 12, date => '2013-07-12' },
@@ -39,11 +44,8 @@ sub test_abstract_sql_statement {
         { distance => 32, date => '2013-07-09' },
     );
 
-    foreach my $expected_row ( @expected_rows ) {
-        my $row = $data_handle->next_row();
-        is_deeply( $row, $expected_row,
-            'Got expected row from abstract sql statement' );
-    }
+    is_deeply( \@retrieved_rows, \@expected_rows,
+        'Got expected rows from abstract sql statement' );
 }
 
 1;
